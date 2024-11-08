@@ -1,0 +1,39 @@
+(ns apploc.main
+  (:require ["package:flutter/material.dart" :as m]
+            [apploc.home :as home]
+            [cljd.flutter :as f])
+  (:import ["package:go_router/go_router.dart"
+            GoRoute
+            GoRouter
+            StatefulShellBranch
+            StatefulShellRoute]))
+
+(def ^:private root-navigator-key
+  (#/(m/GlobalKey m/NavigatorState) .debugLabel "root"))
+
+(def routing
+  (GoRouter
+   .initialLocation "/a"
+   .navigatorKey root-navigator-key
+   .routes
+   [(StatefulShellRoute/indexedStack
+     .builder home/layout
+     .branches
+     [(StatefulShellBranch
+       .routes
+       [(GoRoute
+         .name "a"
+         .path "/a"
+         .builder home/page-a)])
+      (StatefulShellBranch
+       .routes
+       [(GoRoute
+         .name "b"
+         .path "/b"
+         .builder home/page-b)])])]))
+
+(defn main
+  []
+  (f/run
+   (m/MaterialApp.router
+    .routerConfig routing)))

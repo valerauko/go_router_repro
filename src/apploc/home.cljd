@@ -1,0 +1,51 @@
+(ns apploc.home
+  (:require ["package:flutter/material.dart" :as m]
+            [apploc.listener :refer [listen-state]]
+            [cljd.flutter :as f])
+  (:import ["package:go_router/go_router.dart"
+            GoRouterState
+            StatefulNavigationShell]))
+
+(def ^m/Widget layout
+  (f/build
+   [^GoRouterState _state ^StatefulNavigationShell body]
+   ;; uncommenting listen-state results in navigation no longer working
+   ;; #_{:clj-kondo/ignore [:invalid-arity]}
+   ;; (listen-state)
+   (m/Scaffold
+    .bottomNavigationBar
+    (m/NavigationBar
+     .onDestinationSelected #(.goBranch body %)
+     .selectedIndex (.-currentIndex body)
+     .destinations
+     [(m/NavigationDestination
+       .selectedIcon (m/Icon
+                      m/Icons.home
+                      .size 24)
+       .icon (m/Icon
+              m/Icons.home_outlined
+              .size 24)
+       .label "A")
+      (m/NavigationDestination
+       .selectedIcon (m/Icon
+                      m/Icons.aod
+                      .size 24)
+       .icon (m/Icon
+              m/Icons.aod_outlined
+              .size 24)
+       .label "B")]))
+   .body
+   m/SafeArea
+   body))
+
+(def ^m/Widget page-a
+  (f/build
+   [_]
+   m/Container
+   (m/Text "A")))
+
+(def ^m/Widget page-b
+  (f/build
+   [_]
+   m/Container
+   (m/Text "B")))

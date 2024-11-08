@@ -1,0 +1,26 @@
+(ns apploc.listener
+  (:require ["package:flutter/material.dart" :as m]))
+
+(defn listen-state
+  [^m/Widget
+   #_{:clj-kondo/ignore [:unused-binding]}
+   .child]
+  (println "listen-state call")
+  (reify :extends m/StatefulWidget
+    :no-meta true
+    (createState
+      [_this]
+      (reify :extends m/State
+        :no-meta true
+
+        (initState [this]
+          (.initState ^super this)
+          nil)
+
+        (dispose [this]
+          (.dispose ^super this))
+
+        (build [_this _context]
+          (println "listen-state build call")
+          #_{:clj-kondo/ignore [:unresolved-symbol]}
+          child)))))
